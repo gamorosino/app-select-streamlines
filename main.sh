@@ -46,14 +46,15 @@ EOF
 tractogram=$1
 parc=$2
 ends_only=$3
+outputdir=$4
 
 [ "${ends_only}"  == "true" ] && { ends_only=" --nds_only "; }
 
 ecc_polar_dir=./ecc_polar
-mkdir ${ecc_polar}
+mkdir ${ecc_polar_dir}
 
 imm_unpackSeg $parc ${ecc_polar_dir}
-mkdir ./tcks
+mkdir ${outputdir}
 count=0
 
 for parcel in $( ls ${ecc_polar_dir}/* ); do
@@ -62,4 +63,4 @@ for parcel in $( ls ${ecc_polar_dir}/* ); do
   tck=track_${count}.tck
   tckedit ${tractogram} -include ${parcel} ${ends_only_cmd} ./tcks/${tck}
   
-fi
+done
