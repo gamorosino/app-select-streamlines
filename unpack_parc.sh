@@ -53,11 +53,8 @@ wait_for_jobs() {
 
 # Parse arguments
 parc=$1
+ecc_polar_dir=$2
 
-
-[ "$ends_only" == "true" ] && ends_only_cmd="--ends_only"
-
-ecc_polar_dir="./ecc_polar"
 mkdir -p "${ecc_polar_dir}"
 
 imm_unpackSeg "$parc" "$ecc_polar_dir"
