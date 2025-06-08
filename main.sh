@@ -1,20 +1,6 @@
-#! /bin/bash
+#!/bin/bash
 
-
-CPUs_available () {
-        
-                        
-			local cpu_load=$( echo $( top -b -n2 | grep "Cpu(s)" | awk '{print $2+$4}' | tail -n1 ))		
-			local cpu_load_f=$(echo "scale=5; ${cpu_load}/100  " | bc)
-			local cpu_num_all_n=$(( $( getconf _NPROCESSORS_ONLN )-0 ))	
-			local cores_used=$(echo "scale=5; ${cpu_load_f}*${cpu_num_all_n} " | bc)
-			local cores_used=${cores_used%.*}
-			local cores_used=$(( ${cores_used}-0 ))								
-			local cpu_num_all=$(( cpu_num_all_n-$cores_used))							
-			echo $cpu_num_all
-
-			};
-
+# Unpack segmentation into individual label files
 imm_unpackSeg() {
     if [ $# -lt 1 ]; then
         echo "$0: usage: imm_unpackSeg <segmentation.ext> [<output_folder>]"
@@ -30,7 +16,7 @@ imm_unpackSeg() {
 
     mkdir -p "$ofolder"
 
-    python3 - <<EOF
+    python <<EOF
 import os
 import nibabel as nib
 import numpy as np
@@ -52,21 +38,21 @@ unpack_segmentation("$seg", "$ofolder", "$base_name")
 EOF
 }
 
-# Controls how many jobs run in parallel
-max_jobs=$( CPUs_available )
-
+# Limit concurrent jobs
+max_jobs=4
 wait_for_jobs() {
-    while (( $(jobs -r | wc -l) >= max_jobs )); do
+    while [ "$(jobs -r | wc -l)" -ge "$max_jobs" ]; do
         sleep 1
     done
 }
 
+# Input args
 tractogram=$1
 parc=$2
 ends_only=$3
 outputdir=$4
 
-[ "${ends_only}" == "true" ] && ends_only_cmd="--ends_only"
+[ "$ends_only" == "true" ] && ends_only_cmd="--ends_only"
 
 ecc_polar_dir=./ecc_polar
 mkdir -p "${ecc_polar_dir}"
@@ -75,14 +61,13 @@ imm_unpackSeg "$parc" "$ecc_polar_dir"
 mkdir -p "${outputdir}"
 
 count=0
-
 for parcel in "${ecc_polar_dir}"/*; do
     count=$((count + 1))
     tck="track_${count}.tck"
 
     wait_for_jobs
 
-    tckedit "${tractogram}" -include "${parcel}" ${ends_only_cmd} "${outputdir}/${tck}" &
+    tckedit "$tractogram" -include "$parcel" ${ends_only_cmd} "${outputdir}/${tck}" &
 done
 
-wait  # Wait for all background jobs to finish
+wait  # Wait for all jobs to finish
