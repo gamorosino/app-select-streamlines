@@ -8,4 +8,8 @@
 
 tractogram=`jq -r '.tractogram' config.json`
 parc=$(jq -r .parc config.json)
+ends_only=$( j1 -r .ends_only condifg.json )
 
+
+singularity exec -e docker://brainlife/mrtrix3:3.0.3 \
+  bash ./main.sh ${tractogram} ${parc} ${ends_only}
