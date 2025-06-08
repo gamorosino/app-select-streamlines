@@ -61,6 +61,6 @@ for parcel in $( ls ${ecc_polar_dir}/* ); do
 
   count=$(( $count + 1 ))
   tck=track_${count}.tck
-  tckedit ${tractogram} -include ${parcel} ${ends_only_cmd} ./tcks/${tck}
+  tckedit ${tractogram} -include ${parcel} ${ends_only_cmd} ${outputdir}/${tck}
   
 done
