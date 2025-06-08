@@ -43,13 +43,6 @@ for label in labels:
 EOF
 }
 
-# Limit parallel jobs
-max_jobs=4
-wait_for_jobs() {
-    while [ "$(jobs -r | wc -l)" -ge "$max_jobs" ]; do
-        sleep 1
-    done
-}
 
 # Parse arguments
 parc=$1
