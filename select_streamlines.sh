@@ -3,7 +3,7 @@
 
 
 wait_for_jobs() {
-	local max_job=$1
+	local max_jobs=$1
     while [ "$(jobs -r | wc -l)" -ge "$max_jobs" ]; do
         sleep 1
     done
@@ -18,7 +18,7 @@ max_jobs=$5
 
 [ "$ends_only" == "true" ] && ends_only_cmd="--ends_only"
 
-mkdir -p "$outputdir"
+mkdir -p "${outputdir}"
 
 count=0
 shopt -s nullglob  # Avoid literal *.nii.gz if no files found
@@ -28,7 +28,7 @@ for parcel in "$ecc_polar_dir"/*.nii.gz; do
 
     wait_for_jobs ${max_jobs}
 
-    tckedit "$tractogram" -include "$parcel" ${ends_only_cmd} "$outputdir/$tck" &
+    tckedit "$tractogram" -include "$parcel" ${ends_only_cmd} "${outputdir}/${tck}" &
 done
 
 wait  # Wait for background jobs
