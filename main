@@ -24,7 +24,7 @@ max_jobs=$( nthreads_available )
 
 tractogram=`jq -r '.tractogram' config.json`
 parc=$(jq -r .parc config.json)
-ends_only=$( j1 -r .ends_only condifg.json )
+ends_only=$( jq -r .ends_only condifg.json )
 
 echo "tractogram: "${tractogram}
 echo "parcellation: "${parc}
