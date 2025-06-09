@@ -2,6 +2,22 @@
 #PBS -l nodes=1:ppn=1,vmem=8g,walltime=2:00:00
 #PBS -N app-select-streamlines
 #PBS -V
+nthreads_available () {
+            
+                        
+			local cpu_load=$( echo $( top -b -n2 | grep "Cpu(s)" | awk '{print $2+$4}' | tail -n1 ))		
+			local cpu_load_f=$(echo "scale=5; ${cpu_load}/100  " | bc)
+			local cpu_num_all_n=$(( $( getconf _NPROCESSORS_ONLN )-0 ))	
+			local cores_used=$(echo "scale=5; ${cpu_load_f}*${cpu_num_all_n} " | bc)
+			local cores_used=${cores_used%.*}
+			local cores_used=$(( ${cores_used}-0 ))								
+			local cpu_num_all=$(( cpu_num_all_n-$cores_used))							
+			echo $cpu_num_all
+
+			};
+
+# Limit parallel jobs
+max_jobs=$( nthreads_available ) 
 
 
 #set -e
@@ -17,4 +33,4 @@ singularity exec -e docker://brainlife/dipy:1.4.1 \
 outputdir=./tcks
 
 singularity exec -e docker://brainlife/mrtrix3:3.0.3 \
-  bash ./select_streamlines.sh ${tractogram} ${parc} ${ends_only} ${outputdir}
+  bash ./select_streamlines.sh ${tractogram} ${parc} ${ends_only} ${outputdir} ${max_jobs}
