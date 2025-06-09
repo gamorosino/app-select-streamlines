@@ -24,7 +24,7 @@ count=0
 shopt -s nullglob  # Avoid literal *.nii.gz if no files found
 for parcel in "$ecc_polar_dir"/*.nii.gz; do
 
-    tck=${parcel//'parc'/track}
+    tck=$( basename ${parcel//'parc'/track} )
     tck=${tck//'.nii.gz'/'.tck'}
 
     wait_for_jobs ${max_jobs}
