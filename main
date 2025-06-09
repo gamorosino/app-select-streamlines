@@ -17,4 +17,4 @@ singularity exec -e docker://brainlife/dipy:1.4.1 \
 outputdir=./tcks
 
 singularity exec -e docker://brainlife/mrtrix3:3.0.3 \
-  bash ./main.sh ${tractogram} ${parc} ${ends_only} ${outputdir}
+  bash ./select_streamlines.sh ${tractogram} ${parc} ${ends_only} ${outputdir}
