@@ -1,4 +1,4 @@
-# Segmentation-Based Tractography Extraction
+# Streamline Selection by Parcellation 
 
 An automated and reproducible pipeline to extract streamlines from a tractogram based on a labeled parcellation image. The tool supports efficient region-wise filtering using MRtrix and allows for parallel execution, making it suitable for structural connectivity analyses and parcel-based streamline extraction workflows.
 
