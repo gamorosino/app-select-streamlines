@@ -65,7 +65,7 @@ bash ./main sub-01_dwi_tracts.tck sub-01_parc.nii.gz true ./tracts_by_region
 ```
 
 Outputs  
-- `ecc_polar/` — Unpacked binary masks from the segmentation  
+- `ROIs/` — Unpacked binary masks from the segmentation  
 - `tracts_by_region/` — Streamlines intersecting each parcel (`track_<label>.tck`)
 
 ## Citation  
