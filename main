@@ -30,11 +30,11 @@ echo "tractogram: "${tractogram}
 echo "parcellation: "${parc}
 echo "ends only: " ${ends_only}
 
-ecc_polar_dir="./ROIs"
+ROIS_dir="./ROIs"
 singularity exec -e docker://brainlife/dipy:1.4.1 \
-  bash ./unpack_parc.sh ${parc} ${ecc_polar_dir}
+  bash ./unpack_parc.sh ${parc} ${ROIS_dir}
 
 outputdir=./tcks
 
 singularity exec -e docker://brainlife/mrtrix3:3.0.3 \
-  bash ./select_streamlines.sh ${tractogram} ${ecc_polar_dir} ${ends_only} ${outputdir} ${max_jobs}
+  bash ./select_streamlines.sh ${tractogram} ${ROIS_dir} ${ends_only} ${outputdir} ${max_jobs}
