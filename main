@@ -30,7 +30,7 @@ echo "tractogram: "${tractogram}
 echo "parcellation: "${parc}
 echo "ends only: " ${ends_only}
 
-ecc_polar_dir="./ecc_polar"
+ecc_polar_dir="./ROIs"
 singularity exec -e docker://brainlife/dipy:1.4.1 \
   bash ./unpack_parc.sh ${parc} ${ecc_polar_dir}
 
